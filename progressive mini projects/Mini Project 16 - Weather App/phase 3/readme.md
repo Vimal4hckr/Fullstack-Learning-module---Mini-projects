@@ -1,402 +1,786 @@
-# Weather App — Phase 3
+# Weather App — Phase 1
+## Project Overview
 
-## What Was Added
+This is a simple Weather App built using:
 
-In Phase 3, the Weather App was upgraded to display a **5-day weather forecast**.
+* HTML
+* CSS
+* JavaScript
+* DOM
+* Fetch API
+* async/await
+* JSON
+* Open-Meteo API
 
-The main purpose of this phase is to learn how to work with **arrays, loops, and dynamically created DOM elements**.
+The user enters a city name and the application displays the current weather information for that city.
 
-## New Features
+## Phase 1 Goal
 
-### 1. 5-Day Forecast
+The main goal of Phase 1 is to learn how JavaScript can communicate with an external API and display the received data on a webpage.
 
-The application now displays weather information for the next 5 days.
-
-Each day shows:
-
-* Date
-* Weather icon
-* Weather condition
-* Maximum temperature
-* Minimum temperature
-
-The API request now includes:
-
-```text
-forecast_days=5
-```
-
-This tells the API to return 5 days of forecast data.
-
-### 2. Daily Weather Code
-
-We added:
-
-```text
-daily=weather_code,temperature_2m_max,temperature_2m_min
-```
-
-This provides weather information for each day.
-
-The data contains arrays such as:
-
-```javascript
-dailyWeather.time
-dailyWeather.weather_code
-dailyWeather.temperature_2m_max
-dailyWeather.temperature_2m_min
-```
-
-### 3. Arrays
-
-The forecast data is stored in arrays.
-
-Example:
-
-```javascript
-dailyWeather.time
-```
-
-contains the dates.
-
-```javascript
-dailyWeather.temperature_2m_max
-```
-
-contains the maximum temperatures.
-
-```javascript
-dailyWeather.temperature_2m_min
-```
-
-contains the minimum temperatures.
-
-Each array position represents the same day.
-
-For example:
-
-```text
-Index 0
-	↓
-Today
-
-Index 1
-	↓
-Tomorrow
-
-Index 2
-	↓
-Day 3
-
-Index 3
-	↓
-Day 4
-
-Index 4
-	↓
-Day 5
-```
-
-### 4. forEach()
-
-We use `forEach()` to go through each forecast day.
-
-```javascript
-dailyWeather.time.forEach(function(day,index){
-```
-
-`day` contains the current date.
-
-`index` tells us the position of that date in the array.
-
-For example:
-
-```text
-index = 0
-	↓
-First day
-
-index = 1
-	↓
-Second day
-
-index = 2
-	↓
-Third day
-```
-
-### 5. createElement()
-
-Instead of writing all five forecast cards manually in HTML, JavaScript creates them.
-
-```javascript
-const card=document.createElement("div");
-```
-
-This creates a new `<div>` element.
-
-We then add a class:
-
-```javascript
-card.className="forecast-card";
-```
-
-### 6. Creating Forecast Information
-
-JavaScript creates the date:
-
-```javascript
-const dayName=document.createElement("h3");
-```
-
-Then adds the date:
-
-```javascript
-dayName.textContent=day;
-```
-
-The weather icon is also created dynamically:
-
-```javascript
-const icon=document.createElement("div");
-```
-
-The weather condition is created:
-
-```javascript
-const weatherText=document.createElement("p");
-```
-
-The maximum temperature is created:
-
-```javascript
-const max=document.createElement("p");
-```
-
-The minimum temperature is created:
-
-```javascript
-const min=document.createElement("p");
-```
-
-### 7. appendChild()
-
-After creating the elements, we add them to the forecast card.
-
-```javascript
-card.appendChild(dayName);
-card.appendChild(icon);
-card.appendChild(weatherText);
-card.appendChild(max);
-card.appendChild(min);
-```
-
-Then the card is added to the forecast container:
-
-```javascript
-forecast.appendChild(card);
-```
-
-### 8. Dynamic DOM
-
-This phase introduces an important concept:
-
-**Dynamic DOM creation**
-
-Instead of creating everything manually in HTML:
-
-```text
-HTML
-	↓
-Fixed content
-```
-
-we now create content using JavaScript:
-
-```text
-API Data
-	↓
-JavaScript
-	↓
-createElement()
-	↓
-appendChild()
-	↓
-HTML page
-```
-
-### 9. Clearing Old Forecast
-
-When the user searches for another city, we need to remove the previous forecast.
-
-We use:
-
-```javascript
-forecast.innerHTML="";
-```
-
-For example:
-
-```text
-Search Chennai
-	↓
-Chennai forecast displayed
-
-Search Mumbai
-	↓
-Remove Chennai forecast
-	↓
-Display Mumbai forecast
-```
-
-## Phase 1 vs Phase 2 vs Phase 3
-
-| Feature                | Phase 1 | Phase 2  | Phase 3  |
-| ---------------------- | ------- | -------- | -------- |
-| City Search            | ✅       | ✅        | ✅        |
-| Temperature            | ✅       | ✅        | ✅        |
-| Humidity               | ✅       | ✅        | ✅        |
-| Wind Speed             | ✅       | ✅        | ✅        |
-| Weather Condition      | Basic   | Improved | Improved |
-| Weather Icon           | ✅       | ✅        | ✅        |
-| Feels Like             | ❌       | ✅        | ✅        |
-| Precipitation          | ❌       | ✅        | ✅        |
-| Maximum Temperature    | ❌       | ✅        | ✅        |
-| Minimum Temperature    | ❌       | ✅        | ✅        |
-| Date                   | ❌       | ✅        | ✅        |
-| 5-Day Forecast         | ❌       | ❌        | ✅        |
-| Arrays                 | Basic   | Basic    | ✅        |
-| forEach()              | ❌       | ❌        | ✅        |
-| createElement()        | ❌       | ❌        | ✅        |
-| appendChild()          | ❌       | ❌        | ✅        |
-| Dynamic Forecast Cards | ❌       | ❌        | ✅        |
-
-## New JavaScript Concepts
-
-Phase 3 introduces:
-
-```text
-Arrays
-	↓
-Array Index
-	↓
-forEach()
-	↓
-createElement()
-	↓
-className
-	↓
-textContent
-	↓
-appendChild()
-	↓
-Dynamic DOM
-```
-
-## Phase 3 Data Flow
+The basic flow is:
 
 ```text
 User enters city
 	↓
-Geocoding API
+JavaScript gets city name
+	↓
+Geocoding API finds city coordinates
+	↓
+Latitude and Longitude are received
+	↓
+Weather API is called
+	↓
+Weather data is received
+	↓
+JavaScript displays the weather
+```
+
+## Project Structure
+
+```text
+weather-app/
+│
+├── index.html
+├── style.css
+└── script.js
+```
+
+## 1. HTML
+
+The HTML file creates the basic structure of the application.
+
+It contains:
+
+* Heading
+* City input box
+* Search button
+* Weather result area
+* Temperature
+* Weather condition
+* Humidity
+* Wind speed
+* Weather icon
+
+Example:
+
+```html
+<input type="text" id="cityInput" placeholder="Enter city name">
+<button id="searchBtn">Search</button>
+```
+
+The input allows the user to enter a city.
+
+The button starts the weather search.
+
+## 2. CSS
+
+The CSS file controls the appearance of the Weather App.
+
+It is used for:
+
+* Page layout
+* Background
+* Weather card
+* Input styling
+* Button styling
+* Text size
+* Spacing
+* Alignment
+
+The CSS does not handle the weather data.
+
+JavaScript handles the functionality.
+
+## 3. JavaScript
+
+JavaScript connects the HTML page with the weather API.
+
+First, we select the HTML elements:
+
+```javascript
+const cityInput=document.getElementById("cityInput");
+const searchBtn=document.getElementById("searchBtn");
+const weatherResult=document.getElementById("weatherResult");
+```
+
+`document.getElementById()` allows JavaScript to access an HTML element using its `id`.
+
+## 4. Getting the City Name
+
+When the user clicks Search:
+
+```javascript
+searchBtn.addEventListener("click",function(){
+	const city=cityInput.value.trim();
+	getWeather(city);
+});
+```
+
+The value entered by the user is stored in:
+
+```javascript
+const city=cityInput.value.trim();
+```
+
+For example, if the user enters:
+
+```text
+Chennai
+```
+
+then:
+
+```javascript
+city
+```
+
+contains:
+
+```text
+Chennai
+```
+
+## 5. What is an API?
+
+API stands for:
+
+**Application Programming Interface**
+
+An API allows one application to communicate with another service.
+
+Our Weather App does not contain weather information by itself.
+
+Instead, it asks an external weather service for the information.
+
+The process is:
+
+```text
+Weather App
+	↓
+API Request
+	↓
+Weather Service
+	↓
+API Response
+	↓
+Weather App
+```
+
+## 6. What is the Location URL?
+
+The first API URL in our project is:
+
+```javascript
+const locationURL=`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`;
+```
+
+This is called the **Geocoding API URL**.
+
+Its purpose is to find the location of the city entered by the user.
+
+It does NOT directly give us the weather.
+
+It gives us information such as:
+
+* City name
+* Country
+* Latitude
+* Longitude
+
+For example, if the user enters:
+
+```text
+Chennai
+```
+
+the URL becomes similar to:
+
+```text
+https://geocoding-api.open-meteo.com/v1/search?name=Chennai&count=1&language=en&format=json
+```
+
+## 7. Why Do We Need the Location API?
+
+Weather data is commonly requested using geographical coordinates.
+
+A city name alone is not enough for the weather API.
+
+We first need:
+
+```text
+City
+	↓
+Latitude
+Longitude
+```
+
+For example:
+
+```text
+Chennai
+Latitude: 13.08
+Longitude: 80.27
+```
+
+These coordinates can then be sent to the weather API.
+
+## 8. Understanding the Location URL
+
+The URL contains different parts.
+
+```text
+https://geocoding-api.open-meteo.com
+```
+
+This is the Open-Meteo Geocoding API server.
+
+```text
+/v1/search
+```
+
+This tells the API that we want to search for a location.
+
+```text
+name=
+```
+
+This tells the API which city we want to search for.
+
+```javascript
+${encodeURIComponent(city)}
+```
+
+This inserts the city entered by the user.
+
+For example:
+
+```javascript
+city="Chennai"
+```
+
+becomes:
+
+```text
+name=Chennai
+```
+
+## 9. What is encodeURIComponent()?
+
+We use:
+
+```javascript
+encodeURIComponent(city)
+```
+
+to safely place the user's city name inside a URL.
+
+For example, a city can contain spaces or special characters.
+
+Encoding converts those characters into a URL-safe format.
+
+So instead of manually creating a URL, JavaScript builds it automatically.
+
+## 10. What is count=1?
+
+Our URL contains:
+
+```text
+count=1
+```
+
+This means we only want one search result.
+
+For example, if the API finds multiple possible results, we ask it to return the first result.
+
+## 11. What is language=en?
+
+```text
+language=en
+```
+
+tells the API that we want the location information in English.
+
+## 12. What is format=json?
+
+```text
+format=json
+```
+
+means we want the API response in JSON format.
+
+JSON is a common format used for exchanging data between applications.
+
+## 13. Fetch API
+
+We use JavaScript's `fetch()` function to request data from the API.
+
+```javascript
+const locationResponse=await fetch(locationURL);
+```
+
+This sends a request to the Location API.
+
+The API sends a response back.
+
+```text
+JavaScript
+	↓
+fetch()
+	↓
+Location API
+	↓
+Response
+```
+
+## 14. What is async?
+
+Our weather function is:
+
+```javascript
+async function getWeather(city){
+```
+
+`async` allows us to use `await` inside the function.
+
+API requests take some time.
+
+JavaScript should wait for the API response before trying to use the data.
+
+## 15. What is await?
+
+We use:
+
+```javascript
+const locationResponse=await fetch(locationURL);
+```
+
+`await` tells JavaScript to wait for the API request to finish.
+
+Without waiting, JavaScript could try to use the data before the API has responded.
+
+The basic idea is:
+
+```text
+Send request
+	↓
+Wait
+	↓
+Receive response
+	↓
+Continue
+```
+
+## 16. Converting Response to JSON
+
+After receiving the response:
+
+```javascript
+const locationData=await locationResponse.json();
+```
+
+The API response is converted into JavaScript data.
+
+Now we can access information from it.
+
+For example:
+
+```javascript
+locationData.results
+```
+
+contains the search results.
+
+## 17. Getting the Location
+
+We use:
+
+```javascript
+const location=locationData.results[0];
+```
+
+`results` contains the location results.
+
+`[0]` means:
+
+**Get the first result.**
+
+Then:
+
+```javascript
+const latitude=location.latitude;
+const longitude=location.longitude;
+```
+
+gets the coordinates.
+
+## 18. Weather URL
+
+After getting the coordinates, we create the second API URL:
+
+```javascript
+const weatherURL=`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto`;
+```
+
+This API gives us the actual weather.
+
+The flow is:
+
+```text
+Chennai
+	↓
+Location API
 	↓
 Latitude + Longitude
 	↓
 Weather API
 	↓
-5 Days of Data
-	↓
-JavaScript Arrays
-	↓
-forEach()
-	↓
-Create Forecast Card
-	↓
-Add Data
-	↓
-appendChild()
-	↓
-Display Forecast
+Temperature + Humidity + Wind + Weather Code
 ```
 
-## Example
+## 19. Why Are There Two APIs?
 
-Suppose the API returns:
+We use two API requests because they perform two different jobs.
+
+### API 1 — Geocoding
 
 ```text
-Date:
-2026-08-27
-2026-08-28
-2026-08-29
-2026-08-30
-2026-08-31
+City Name
+	↓
+Latitude + Longitude
 ```
 
-JavaScript loops through the dates:
+### API 2 — Weather
+
+```text
+Latitude + Longitude
+	↓
+Weather Information
+```
+
+So:
+
+```text
+City
+	↓
+Geocoding API
+	↓
+Coordinates
+	↓
+Weather API
+	↓
+Weather
+```
+
+## 20. Weather Data
+
+The weather API gives us values such as:
+
+```text
+Temperature
+Humidity
+Wind Speed
+Weather Code
+```
+
+We access them using:
 
 ```javascript
-dailyWeather.time.forEach(function(day,index){
+const currentWeather=weatherData.current;
 ```
 
-For every date, it creates a new forecast card.
+Then:
 
-The result is:
+```javascript
+currentWeather.temperature_2m
+```
+
+gets the temperature.
+
+```javascript
+currentWeather.relative_humidity_2m
+```
+
+gets the humidity.
+
+```javascript
+currentWeather.wind_speed_10m
+```
+
+gets the wind speed.
+
+```javascript
+currentWeather.weather_code
+```
+
+gets the weather code.
+
+## 21. Displaying Data Using DOM
+
+After receiving the data, JavaScript updates the HTML.
+
+For example:
+
+```javascript
+temperature.textContent=`${currentWeather.temperature_2m}°C`;
+```
+
+This changes the temperature shown on the webpage.
+
+Similarly:
+
+```javascript
+humidity.textContent=`${currentWeather.relative_humidity_2m}%`;
+```
+
+updates humidity.
+
+And:
+
+```javascript
+windSpeed.textContent=`${currentWeather.wind_speed_10m} km/h`;
+```
+
+updates wind speed.
+
+## 22. Weather Code
+
+The API gives us a numerical weather code.
+
+For example:
 
 ```text
-5-Day Forecast
-
-2026-08-27
-☀️
-Clear Sky
-Max: 32°C
-Min: 25°C
-
-2026-08-28
-🌤️
-Mainly Clear
-Max: 33°C
-Min: 26°C
-
-2026-08-29
-🌧️
-Rain
-Max: 30°C
-Min: 24°C
+0 → Clear Sky
+1–3 → Cloudy
+45–48 → Fog
+51–57 → Drizzle
+61–67 → Rain
+71–77 → Snow
+80–82 → Rain Showers
+95+ → Thunderstorm
 ```
 
-The actual values depend on the API response.
+We convert these numbers into readable text using:
 
-## Main Learning From Phase 3
+```javascript
+function getWeatherCondition(code){
+```
 
-The most important lesson in Phase 3 is:
+For example:
 
-**We can use JavaScript to create HTML elements dynamically based on data received from an API.**
+```javascript
+if(code===0){
+	return {text:"Clear Sky",icon:"☀️"};
+}
+```
 
-This is a very important skill for building real applications.
+If the weather code is `0`, the application displays:
 
-For example, the same technique can later be used to create:
+```text
+Clear Sky ☀️
+```
 
-* Product cards
-* Student records
-* Employee lists
-* Movie cards
-* Recipe cards
-* Shopping cart items
-* Dashboard tables
-* Search results
+## 23. Error Handling
 
-## Phase 3 Completed
+API requests can fail.
 
-The Weather App can now:
+For example:
 
-* Search for a city
-* Get location coordinates
-* Get current weather
-* Display current weather
-* Display today's information
-* Display a 5-day forecast
-* Create forecast cards dynamically
-* Display different weather icons
-* Handle API errors
-* Handle empty input
-* Search using the Enter key
+* City does not exist
+* Internet connection is unavailable
+* API request fails
+* Unexpected API response
+
+Therefore, we use:
+
+```javascript
+try{
+	// API code
+}
+catch(error){
+	// Error code
+}
+```
+
+If something goes wrong:
+
+```javascript
+message.textContent="City not found. Please try again.";
+```
+
+is displayed.
+
+## 24. Enter Key
+
+The user can also press Enter instead of clicking Search.
+
+```javascript
+cityInput.addEventListener("keypress",function(event){
+	if(event.key==="Enter"){
+		getWeather(city);
+	}
+});
+```
+
+This demonstrates how JavaScript can respond to keyboard events.
+
+## 25. Important Concepts Learned in Phase 1
+
+```text
+document.getElementById()
+	↓
+DOM Selection
+```
+
+```text
+addEventListener()
+	↓
+Events
+```
+
+```text
+fetch()
+	↓
+API Request
+```
+
+```text
+async / await
+	↓
+Asynchronous JavaScript
+```
+
+```text
+response.json()
+	↓
+JSON Data
+```
+
+```text
+try / catch
+	↓
+Error Handling
+```
+
+```text
+textContent
+	↓
+Updating HTML
+```
+
+```text
+encodeURIComponent()
+	↓
+URL Encoding
+```
+
+## 26. Phase 1 Learning Flow
+
+```text
+HTML
+	↓
+Create input and output elements
+	↓
+JavaScript
+	↓
+Read city name
+	↓
+Geocoding API
+	↓
+Get coordinates
+	↓
+Weather API
+	↓
+Get weather data
+	↓
+JSON
+	↓
+Extract values
+	↓
+DOM
+	↓
+Display weather
+```
+
+## 27. Phase 1 Completed Features
+
+* City search
+* Enter key search
+* Location search
+* Latitude and longitude retrieval
+* Weather API request
+* Temperature
+* Humidity
+* Wind speed
+* Weather condition
+* Weather icon
+* Loading message
+* Error handling
+
+## 28. Important Note
+
+You do **not** replace `locationURL` with your city or your own URL.
+
+This:
+
+```javascript
+const locationURL=`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`;
+```
+
+is the API endpoint.
+
+The city changes automatically through:
+
+```javascript
+${encodeURIComponent(city)}
+```
+
+If the user enters:
+
+```text
+Chennai
+```
+
+the API searches for Chennai.
+
+If the user enters:
+
+```text
+Mumbai
+```
+
+the API searches for Mumbai.
+
+If the user enters:
+
+```text
+Delhi
+```
+
+the API searches for Delhi.
+
+Therefore, the URL remains the same while the city value changes.
+
+## Phase 1 Summary
+
+In Phase 1, we learned how to build a basic Weather App and connect JavaScript to an external API.
+
+The most important concept is:
+
+```text
+User Input
+	↓
+API Request
+	↓
+API Response
+	↓
+JSON
+	↓
+JavaScript
+	↓
+DOM
+	↓
+Webpage
+```
+
+This is the foundation for many real-world JavaScript applications.
